@@ -68,7 +68,7 @@ if (!$demoMode && isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && isset
 		fwrite($fh, $settingsContents);
 		fclose($fh);
 	} else {
-		echo "<script>top.ICEcoder.message('".$t['Cannot update config']." lib/".$settingsFile." ".$t['and try again']."');</script>";
+		echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config']." lib/".$settingsFile." ".$t['and try again']."','error');</script>";
 	}
 
 	// OK, now the config file has been updated, update our current session with new arrays
@@ -99,7 +99,7 @@ if (!$demoMode && isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && isset
 		fwrite($fConfigSettings, $generalSettingsContents);
 		fclose($fConfigSettings);
 	} else {
-		echo "<script>top.ICEcoder.message('".$t['Cannot update config']." lib/".$configSettings." ".$t['and try again']."');</script>";
+		echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config']." lib/".$configSettings." ".$t['and try again']."','error');</script>";
 	}
 
 	$githubAuthTokenSet = $ICEcoder["githubAuthToken"] != "" ? "true" : "false";

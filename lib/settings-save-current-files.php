@@ -31,7 +31,7 @@ if ($_SESSION['loggedIn'] && isset($_GET["saveFiles"]) && $_GET['saveFiles']) {
 			fwrite($fh, $settingsContents);
 			fclose($fh);
 		} else {
-			echo "<script>top.ICEcoder.message('".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."');</script>";
+			echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."','error');</script>";
 		}
 
 		// Update our last10Files var?
@@ -50,7 +50,7 @@ if ($_SESSION['loggedIn'] && isset($_GET["saveFiles"]) && $_GET['saveFiles']) {
 					fwrite($fh, $settingsContents);
 					fclose($fh);
 				} else {
-					echo "<script>top.ICEcoder.message('".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."');</script>";
+					echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."','error');</script>";
 				}
 			}
 		}

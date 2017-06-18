@@ -17,7 +17,7 @@ $context = stream_context_create(array('http'=>
 
 // Start a session if we haven't already
 if(!isset($_SESSION)) {
-	ini_set('session.use_cookies','1');				// Use cookies not URL parameters 
+	ini_set('session.use_cookies','1');				// Use cookies not URL parameters
 	ini_set('session.use_only_cookies','1');			// Force use of cookies and nothing else
 	ini_set('session.name','ICEcoder_Cookie');			// Set a seperate cookie session name
 	ini_set('session.cookie_lifetime','0');        			// Until the browser restarts by default
@@ -31,7 +31,7 @@ if(!isset($_SESSION)) {
 	ini_set('session.save_path',dirname(__FILE__).'/../tmp');	// Localise the session files to /tmp
 
 	if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
-		ini_set('session.cookie_secure','1');			// Only allows access to session ID when protocol is HTTPS, switched on under 'if https' condition 
+		ini_set('session.cookie_secure','1');			// Only allows access to session ID when protocol is HTTPS, switched on under 'if https' condition
 	}
 	@session_start();						// Finally, start the session!
 	if (!isset($_SESSION['csrf'])){
@@ -198,7 +198,7 @@ function toUTF8noBOM($string,$message) {
 			}
 		}
 		// Remove any other BOMs from view
-		$string = preg_replace('/'.$bom.'/','',$string); 
+		$string = preg_replace('/'.$bom.'/','',$string);
 
 		// Test for any bad characters
 		$teststring = $string;
@@ -208,7 +208,7 @@ function toUTF8noBOM($string,$message) {
 		if (!$strictUTF8 && strlen($teststringConverted) == strlen($teststringBroken)) {
 			$string = utf8_encode($string);
 			if ($message) {
-				echo "top.ICEcoder.message('".$t['Your document does...'].".');";
+				echo "top.ICEcoder.message('Converted','".$t['Your document does...'].".','info');";
 			}
 		}
 	}

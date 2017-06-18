@@ -112,7 +112,7 @@ if (!$demoMode && isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && isset
 			echo "<script>window.location='ftp-manager.php?updatedFTPSites&csrf='+top.ICEcoder.csrf;</script>";
 			die($t['Saving FTP sites']);
 		} else {
-			echo "<script>top.ICEcoder.message('".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."');</script>";
+			echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."','error');</script>";
 		}
 	}
 }

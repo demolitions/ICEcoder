@@ -412,10 +412,10 @@ var showHideTabs = function() {
 
 var validatePasswords = function() {
 	if (document.settings.password.value != 0 && document.settings.password.value.length<8) {
-		top.ICEcoder.message('Please use at least 8 chars in the password');
+		top.ICEcoder.message('Sorry','Please use at least 8 chars in the password','error');
 	} else {
 		if (document.settings.password.value != document.settings.passwordConfirm.value) {
-			top.ICEcoder.message('Sorry, your passwords don\'t match')
+			top.ICEcoder.message('Sorry','Sorry, your passwords don\'t match','error');
 		} else {
 			document.settings.submit();
 		}
@@ -432,7 +432,7 @@ var switchTab = function(tab) {
 }
 </script>
 
-<div class="update" id="updateButton" onClick="<?php echo $ICEcoder['demoMode'] ? "top.ICEcoder.message('Sorry, can\'t commit settings in demo mode')" : "validatePasswords()"; ?>">update</div>
+<div class="update" id="updateButton" onClick="<?php echo $ICEcoder['demoMode'] ? "top.ICEcoder.message('Sorry','Sorry, can\'t commit settings in demo mode','error')" : "validatePasswords()"; ?>">update</div>
 <input type="hidden" name="csrf" value="<?php echo $_SESSION["csrf"]; ?>">
 </form>
 

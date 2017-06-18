@@ -27,7 +27,7 @@ if (!$demoMode && isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && isset
 			if (is_writable($docRoot)) {
 				mkdir($docRoot.$chosenLocal, octdec($ICEcoder['newDirPerms']));
 			} else {
-				echo "<script>top.ICEcoder.message('".$t['Sorry, cannot create...']."\\n".$chosenLocal."');</script>";
+				echo "<script>top.ICEcoder.message('Sorry','".$t['Sorry, cannot create...']."\\n".$chosenLocal."','error');</script>";
 			}
 		}
 
@@ -59,7 +59,7 @@ if (!$demoMode && isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && isset
 				// Hide this popup and reload file manager
 				echo "<script>top.ICEcoder.showHide('hide',top.document.getElementById('blackMask'));top.ICEcoder.refreshFileManager();</script>";
 			} else {
-				echo "<script>top.ICEcoder.message('".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."');</script>";
+				echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."','error');</script>";
 			}
 
 		}
@@ -160,7 +160,7 @@ if (!$demoMode && isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && isset
 			echo "<script>window.location='github-manager.php?updatedGithubPaths&csrf='+top.ICEcoder.csrf;</script>";
 			die($t['saving github paths']);
 		} else {
-			echo "<script>top.ICEcoder.message('".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."');</script>";
+			echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."','error');</script>";
 		}
 	}
 }

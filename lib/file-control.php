@@ -52,14 +52,14 @@ for ($i=0; $i<count($allFiles); $i++) {
 	// Die if the file requested isn't something we expect
 	if(
 		// A local folder that isn't the doc root or starts with the doc root
-		($_GET['action']!="getRemoteFile" && !isset($ftpSite) && 
+		($_GET['action']!="getRemoteFile" && !isset($ftpSite) &&
 			rtrim($allFiles[$i],"/") !== rtrim($docRoot,"/") &&
 			strpos(realpath(rtrim(dirname($allFiles[$i]),"/")),realpath(rtrim($docRoot,"/"))) !== 0
 		) ||
 		// Or a remote URL that doesn't start http
 		($_GET['action']=="getRemoteFile" && strpos($allFiles[$i],"http") !== 0)
 		) {
-		die("top.ICEcoder.message('Sorry! - problem with file requested');</script>");
+		die("top.ICEcoder.message('Sorry','Sorry! - problem with file requested','error');</script>");
 	};
 }
 
@@ -74,7 +74,7 @@ if ($_GET['action']=="load") {
 	}
 
 	if (!$canOpen) {
-		echo 'fileType="nothing"; top.ICEcoder.message(\''.$t['Sorry, could not...'].' '.$fileLoc."/".$fileName.'\');';
+		echo 'fileType="nothing"; top.ICEcoder.message(\'Sorry\',\''.$t['Sorry, could not...'].' '.$fileLoc."/".$fileName.'\',\'error\');';
 	} elseif (isset($ftpSite) || file_exists($file)) {
 		$finfo = "text";
 		// Determine what to do based on mime type
@@ -97,7 +97,7 @@ if ($_GET['action']=="load") {
 			ftpStart();
 			// Show user warning if no good connection
 			if (!$ftpConn || !$ftpLogin) {
-				die('top.ICEcoder.message("Sorry, no FTP connection to '.$ftpHost.' for user '.$ftpUser.'");top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);</script>');
+				die('top.ICEcoder.message("Sorry","Sorry, no FTP connection to '.$ftpHost.' for user '.$ftpUser.'","error");top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);</script>');
 				exit;
 			}
 			// Get our file contents and close the FTP connection
@@ -126,7 +126,7 @@ if ($_GET['action']=="load") {
 			echo 'fileType="other";window.open(\'http://'.$_SERVER['SERVER_NAME'].$fileLoc."/".$fileName.'\');';
 		};
 	} else {
-		echo 'fileType="nothing"; top.ICEcoder.message(\''.$t['Sorry'].', '.$fileLoc."/".$fileName.' '.$t['does not seem...'].'\');';
+		echo 'fileType="nothing"; top.ICEcoder.message(\'Sorry\',\''.$t['Sorry'].', '.$fileLoc."/".$fileName.' '.$t['does not seem...'].'\',\'error\');';
 	}
 
 };
@@ -217,16 +217,16 @@ if (action=="load") {
 
 	if (fileType=="image") {
 		top.document.getElementById('blackMask').style.visibility = "visible";
-		top.document.getElementById('mediaContainer').innerHTML = 
-			"<canvas id=\"canvasPicker\" width=\"1\" height=\"1\" style=\"position: absolute; margin: 10px 0 0 10px; cursor: crosshair\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></canvas>" + 
+		top.document.getElementById('mediaContainer').innerHTML =
+			"<canvas id=\"canvasPicker\" width=\"1\" height=\"1\" style=\"position: absolute; margin: 10px 0 0 10px; cursor: crosshair\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></canvas>" +
 			"<img src=\"<?php echo (isset($ftpSite) ? $ftpSite : "").$fileLoc."/".$fileName."?unique=".microtime(true);?>\" class=\"whiteGlow\" style=\"border: solid 10px #fff; max-width: 700px; max-height: 500px; background-color: #000; background-image: url('images/checkerboard.png')\" onLoad=\"reducedImgMsg = (this.naturalWidth > 700 || this.naturalHeight > 500) ? ', <?php echo $t['displayed at']; ?> ' + this.width + ' x ' + this.height : ''; document.getElementById('imgInfo').innerHTML += ' (' + this.naturalWidth + ' x ' + this.naturalHeight + reducedImgMsg + ')'; top.ICEcoder.initCanvasImage(this); top.ICEcoder.interactCanvasImage(this)\"><br>" +
-			"<div class=\"whiteGlow\" style=\"display: inline-block; margin-top: -10px; border: solid 10px #fff; color: #000; background-color: #fff\" id=\"imgInfo\"  onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\">" + 
-				"<b><?php echo $fileLoc."/".$fileName;?></b>" + 
-			"</div><br>" + 
+			"<div class=\"whiteGlow\" style=\"display: inline-block; margin-top: -10px; border: solid 10px #fff; color: #000; background-color: #fff\" id=\"imgInfo\"  onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\">" +
+				"<b><?php echo $fileLoc."/".$fileName;?></b>" +
+			"</div><br>" +
 			"<div id=\"canvasPickerColorInfo\">"+
-			"<input type=\"text\" id=\"hexMouseXY\" style=\"border: 1px solid #888; border-right: 0; width: 70px\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></input>" + 
-			"<input type=\"text\" id=\"rgbMouseXY\" style=\"border: 1px solid #888; margin-right: 10px; width: 70px\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></input>" + 
-			"<input type=\"text\" id=\"hex\" style=\"border: 1px solid #888; border-right: 0; width: 70px\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></input>" + 
+			"<input type=\"text\" id=\"hexMouseXY\" style=\"border: 1px solid #888; border-right: 0; width: 70px\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></input>" +
+			"<input type=\"text\" id=\"rgbMouseXY\" style=\"border: 1px solid #888; margin-right: 10px; width: 70px\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></input>" +
+			"<input type=\"text\" id=\"hex\" style=\"border: 1px solid #888; border-right: 0; width: 70px\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></input>" +
 			"<input type=\"text\" id=\"rgb\" style=\"border: 1px solid #888; width: 70px\" onmouseover=\"top.ICEcoder.overPopup=true\" onmouseout=\"top.ICEcoder.overPopup=false\"></input>"+
 			"</div>"+
 			"<div id=\"canvasPickerCORSInfo\" style=\"display: none; padding-top: 4px\">CORS not enabled on resource site</div>";

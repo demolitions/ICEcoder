@@ -127,7 +127,7 @@ if (isset($ftpSite)) {
 	ftpStart();
 	// Show user warning if no good connection
 	if (!$ftpConn || !$ftpLogin) {
-		die('<script>top.ICEcoder.message("Sorry, no FTP connection to '.$ftpHost.' for user '.$ftpUser.'");</script>');
+		die('<script>top.ICEcoder.message("Sorry","Sorry, no FTP connection to '.$ftpHost.' for user '.$ftpUser.'","error");</script>');
 		exit;
 	}
 	// Get our simple and detailed lists and close the FTP connection
@@ -368,7 +368,7 @@ if (!isset($ftpSite) && $_SESSION['githubDiff']) {
 			},4);
 		} else {
 			// There was an error, display HTTP error code and response message
-			top.ICEcoder.message('<?php echo $t['Sorry, there was...'];?> '+err.error+'\n\n'+err.request.response);
+			top.ICEcoder.message('Sorry','<?php echo $t['Sorry, there was...'];?> '+err.error+'\n\n'+err.request.response,'error');
 			top.ICEcoder.showHide('hide',top.get('loadingMask'));
 		}
 	});

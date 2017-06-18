@@ -145,7 +145,7 @@ if (!$demoMode && isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] && isset
 		}
 		die("<span style='color: #fff'>".$t['saving plugins']."</span>");
 	} else {
-		echo "<script>top.ICEcoder.message('".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."');</script>";
+		echo "<script>top.ICEcoder.message('Sorry','".$t['Cannot update config...']." lib/".$settingsFile." ".$t['and try again']."','error');</script>";
 	}
 }
 

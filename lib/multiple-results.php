@@ -79,7 +79,7 @@ if (startTab!=top.ICEcoder.selectedTab) {
 		for (var i=0;i<spansArray.length;i++) {
 			foundInSelected = false;
 			targetURL = spansArray[i].id.replace(/\|/g,"/").toLowerCase();
-			if (	targetURL.lastIndexOf(findText.toLowerCase()) > targetURL.lastIndexOf("/") 
+			if (	targetURL.lastIndexOf(findText.toLowerCase()) > targetURL.lastIndexOf("/")
 				&& targetURL.indexOf(findText.toLowerCase())>-1 && targetURL.indexOf('_perms')>-1) {
 				if (userTarget.indexOf("selected")>-1) {
 					for (var j=0;j<top.ICEcoder.selectedFiles.length;j++) {
@@ -169,7 +169,7 @@ if (startTab!=top.ICEcoder.selectedTab) {
 ?>
 showHide = foundArray.length==0 ? "hide" : "show";
 top.ICEcoder.showHide(showHide,top.get('blackMask'));
-if (foundArray.length==0) {top.ICEcoder.message('<?php echo $t['No matches found'];?>')};
+if (foundArray.length==0) {top.ICEcoder.message('No matches','<?php echo $t['No matches found'];?>','info')};
 <?php if (isset($_GET['replace'])) { ?>
 if (foundArray.length!=0) {document.getElementById('replaceAll').style.opacity = 1};
 <?php ;}; ?>

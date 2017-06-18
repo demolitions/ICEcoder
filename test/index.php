@@ -71,7 +71,7 @@ test = {
 		} else {
 			testResult("+ FAIL",title);
 			testStopped();
-		}	
+		}
 	},
 
 	saveFile: function() {
@@ -202,7 +202,7 @@ test = {
 				test.getRemoteFile();
 			} else {
 				testResult("- FAIL",title);
-				testStopped();		
+				testStopped();
 			}
 		},200);
 	},
@@ -243,7 +243,7 @@ test = {
 				setTimeout(function() {
 					ICEcoder.closeTab(1,false,true);
 					console.log('TEST COMPLETE!');
-					top.ICEcoder.message('Test Complete!\n\nRan '+s+' of '+total+' tests OK.\nSee console for more details.');
+					top.ICEcoder.message('Done','Test Complete!\n\nRan '+s+' of '+total+' tests OK.<br />See console for more details.','success');
 				},200);
 			} else {
 				testResult("- FAIL",title);
@@ -276,7 +276,7 @@ function displayResults(successful) {
 
 function testStopped() {
 	unitTestResults.innerHTML += " - Test stopped";
-	top.ICEcoder.message("Test stopped, see console for details.");
+	top.ICEcoder.message("Stopped","Test stopped, see console for details.","info");
 }
 </script>
 

@@ -75,7 +75,7 @@ if (!$error) {
 			// On the banned file/dir list
 			(str_replace("*","",$_SESSION['bannedFiles'][$i]) != "" && strpos($allFiles[$i],str_replace("*","",$_SESSION['bannedFiles'][$i]))!==false) ||
 			// A local folder that isn't the doc root or starts with the doc root
-			($_GET['action']!="getRemoteFile" && !isset($ftpSite) && 
+			($_GET['action']!="getRemoteFile" && !isset($ftpSite) &&
 				rtrim($allFiles[$i],"/") !== rtrim($docRoot,"/") &&
 				strpos(realpath(rtrim(dirname($allFiles[$i]),"/")),realpath(rtrim($docRoot,"/"))) !== 0
 			) ||
@@ -95,7 +95,7 @@ if (isset($ftpSite)) {
 	ftpStart();
 	// Show user warning if no good connection
 	if (!$ftpConn || !$ftpLogin) {
-		$doNext .= 'top.ICEcoder.message("Sorry, no FTP connection to '.$ftpHost.' for user '.$ftpUser.'");';
+		$doNext .= 'top.ICEcoder.message("Sorry","Sorry, no FTP connection to '.$ftpHost.' for user '.$ftpUser.'","error");';
 	}
 }
 
@@ -136,7 +136,7 @@ function stitchChanges($fileLines) {
 				} else {
 					// Replace the line with our replacement
 					// and if the last line, prefix with line return and rtrim the new line from JS
-					$fileLines[$j] .= 
+					$fileLines[$j] .=
 						$j==count($fileLines)-1
 						? $ICEcoder["lineEnding"].rtrim($changes[$i][5],$ICEcoder["lineEnding"])
 						: $changes[$i][5];
@@ -195,12 +195,12 @@ if (!$error && $_GET['action']=="save") {
 					if (top.ICEcoder.lastFileDirCheckStatusObj != false) {
 						clearInterval(thisInt);
 
-						if (top.ICEcoder.lastFileDirCheckStatusObj.file && top.ICEcoder.lastFileDirCheckStatusObj.file.exists) {			
+						if (top.ICEcoder.lastFileDirCheckStatusObj.file && top.ICEcoder.lastFileDirCheckStatusObj.file.exists) {
 							overwriteOK = top.ICEcoder.ask("'.$t['That file exists...'].'");
 						} else {
 							noConflictSave = true;
 						};
-						
+
 						/* Saving under conditions: Confirmation of overwrite or there is no filename conflict, it is a new file, in either case we can save */
 						if (overwriteOK || noConflictSave) {
 							newFileName = "'.(isset($ftpSite) ? "" : $docRoot).'" + newFileName;
@@ -218,11 +218,11 @@ if (!$error && $_GET['action']=="save") {
 									/* console.log(statusObj); */
 
 									if (statusObj.status.error) {
-										top.ICEcoder.message(statusObj.status.errorMsg);
+										top.ICEcoder.message("Sorry",statusObj.status.errorMsg,"error");
 									} else {
 										eval(statusObj.action.doNext);
 									}
-						
+
 
 								}
 							};
@@ -284,7 +284,7 @@ if (!$error && $_GET['action']=="save") {
 
 						// get old file contents and count stats on usage \n and \r there
 						// in this case we can keep line endings, which file had before, without
-						// making code version control systems going crazy about line endings change in whole file. 
+						// making code version control systems going crazy about line endings change in whole file.
 						$unixNewLines = preg_match_all('/[^\r][\n]/u', $loadedFile);
 						$windowsNewLines = preg_match_all('/[\r][\n]/u', $loadedFile);
 					} else {
@@ -304,7 +304,7 @@ if (!$error && $_GET['action']=="save") {
 					}
 					// Write our file contents
 					if (!ftpWriteFile($ftpConn, $ftpFilepath, $contents, $ftpMode)) {
-						$doNext .= 'top.ICEcoder.message("Sorry, could not write '.$ftpFilepath.' at '.$ftpHost.'");';
+						$doNext .= 'top.ICEcoder.message("Sorry","Sorry, could not write '.$ftpFilepath.' at '.$ftpHost.'","error");';
 					} else {
 						$doNext .= 'top.ICEcoder.openFileMDTs[top.ICEcoder.selectedTab-1]="'.$filemtime.'";';
 						$doNext .= '(function() {var x=top.ICEcoder.openFileVersions; var y=top.ICEcoder.selectedTab-1; x[y] = "undefined" != typeof x[y] ? x[y]+1 : 1})();top.ICEcoder.updateVersionsDisplay();';
@@ -437,7 +437,7 @@ if (!$error && $_GET['action']=="save") {
 						}
 					}
 				}
-				
+
 				// Reload file manager, rename tab & remove old file highlighting if it was a new file
 				if (isset($_POST['newFileName']) && $_POST['newFileName']!="") {
 					$doNext .= 'top.ICEcoder.selectedFiles=[];top.ICEcoder.updateFileManagerList(\'add\',\''.$fileLoc.'\',\''.$fileName.'\',false,false,false,\'file\');';
@@ -450,11 +450,11 @@ if (!$error && $_GET['action']=="save") {
 				}
 				// Reload previewWindow window if not a Markdown file
 				// In doing this, we check on an interval for the page to be complete and if we last saw it loading
-				// When we are done loading, so set the loading status to false and load plugins ontop...		
+				// When we are done loading, so set the loading status to false and load plugins ontop...
 				$doNext .= 'if (top.ICEcoder.previewWindow.location && top.ICEcoder.previewWindow.location.pathname && top.ICEcoder.previewWindow.location.pathname.indexOf(".md")==-1) {
 					top.ICEcoder.previewWindowLoading = false;
 					top.ICEcoder.previewWindow.location.reload(true);
-					
+
 					top.ICEcoder.checkPreviewWindowLoadingInt = setInterval(function() {
 						if (top.ICEcoder.previewWindow.document.readyState != "loading" && top.ICEcoder.previewWindowLoading) {
 							top.ICEcoder.previewWindowLoading = false;
@@ -466,7 +466,7 @@ if (!$error && $_GET['action']=="save") {
 							top.ICEcoder.previewWindowLoading = top.ICEcoder.previewWindow.document.readyState == "loading" ? true : false;
 						}
 					},4);
-					
+
 				};';
 
 				// Copy over content to diff pane if we have that setting on
@@ -526,7 +526,7 @@ if (!$error && $_GET['action']=="save") {
 
         	} else {
 			$finalAction = "nothing";
-			$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot save']."\\\\n".$file."');";
+			$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot save']."\\\\n".$file."','error');";
 		}
 		$doNext .= 'top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);';
 	}
@@ -543,7 +543,7 @@ if (!$error && $_GET['action']=="newFolder") {
 		if (isset($ftpSite)) {
 			$ftpFilepath = ltrim($fileLoc."/".$fileName,"/");
 			if (!ftpMkDir($ftpConn, octdec($ICEcoder['newDirPerms']), $ftpFilepath)) {
-				$doNext .= 'top.ICEcoder.message("Sorry, could not create dir '.$ftpFilepath.' at '.$ftpHost.'");';
+				$doNext .= 'top.ICEcoder.message("Sorry","Sorry, could not create dir '.$ftpFilepath.' at '.$ftpHost.'","error");';
 			} else {
 				$updateFM = true;
 			}
@@ -561,7 +561,7 @@ if (!$error && $_GET['action']=="newFolder") {
 		// Run our custom processes
 		include_once("../processes/on-new-dir.php");
 	} else {
-		$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot create...']."\\\\n".$fileLoc."');";
+		$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot create...']."\\\\n".$fileLoc."','error');";
 		$finalAction = "nothing";
 	}
 	$doNext .= 'top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);';
@@ -585,7 +585,7 @@ if (!$error && $_GET['action']=="move") {
 			// FTP
 			if (isset($ftpSite)) {
 				if (!ftpRename($ftpConn, $srcDir, $tgtDir)) {
-					$doNext .= 'top.ICEcoder.message("Sorry, could not rename '.$srcDir.' to '.$tgtDir.'");';
+					$doNext .= 'top.ICEcoder.message("Sorry","Sorry, could not rename '.$srcDir.' to '.$tgtDir.'","error");';
 				} else {
 					$ftpFileDirInfo = ftpGetFileInfo($ftpConn, ltrim($fileLoc,"/"), $fileName);
 					$fileOrFolder = $ftpFileDirInfo['type'] == "directory" ? "folder" : "file";
@@ -607,7 +607,7 @@ if (!$error && $_GET['action']=="move") {
 			// Run our custom processes
 			include_once("../processes/on-file-dir-move.php");
 		} else {
-			$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot move']."\\\\n".str_replace("|","/",strClean($_GET['oldFileName']))."\\\\n\\\\n".$t['Maybe public write...']."');";
+			$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot move']."\\\\n".str_replace("|","/",strClean($_GET['oldFileName']))."\\\\n\\\\n".$t['Maybe public write...']."','error');";
 			$finalAction = "nothing";
 		}
 	} else {
@@ -628,7 +628,7 @@ if (!$error && $_GET['action']=="rename") {
 		if (isset($ftpSite)) {
 			$ftpFilepath = ltrim($fileLoc."/".$fileName,"/");
 			if (!ftpRename($ftpConn, ltrim(strClean($_GET['oldFileName']),"/"), $ftpFilepath)) {
-				$doNext .= 'top.ICEcoder.message("Sorry, could not rename '.ltrim(strClean($_GET['oldFileName']),"/").' to '.$ftpFilepath.'");';
+				$doNext .= 'top.ICEcoder.message("Sorry",Sorry, could not rename '.ltrim(strClean($_GET['oldFileName']),"/").' to '.$ftpFilepath.'","error");';
 			} else {
 				$updateFM = true;
 			}
@@ -645,7 +645,7 @@ if (!$error && $_GET['action']=="rename") {
 		// Run our custom processes
 		include_once("../processes/on-file-dir-rename.php");
 	} else {
-		$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot rename']."\\\\n".strClean($_GET['oldFileName'])."\\\\n\\\\n".$t['Maybe public write...']."');";
+		$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot rename']."\\\\n".strClean($_GET['oldFileName'])."\\\\n\\\\n".$t['Maybe public write...']."','error');";
 		$finalAction = "nothing";
 	}
 	$doNext .= 'top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);';
@@ -702,7 +702,7 @@ if (!isset($ftpSite) && !$error && $_GET['action']=="paste") {
 		// Run our custom processes
 		include_once("../processes/on-file-dir-paste.php");
 	} else {
-		$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot copy']." \\\\n".str_replace($docRoot,"",$source)."\\\\n ".$t['into']." \\\\n".str_replace($docRoot,"",$dest)."');";
+		$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot copy']." \\\\n".str_replace($docRoot,"",$source)."\\\\n ".$t['into']." \\\\n".str_replace($docRoot,"",$dest)."','error');";
 		$finalAction = "nothing";
 	}
 	$doNext .= 'top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);';
@@ -714,11 +714,11 @@ if (!isset($ftpSite) && !$error && $_GET['action']=="paste") {
 
 if (!isset($ftpSite) && !$error && $_GET['action']=="upload") {
 	if (!$demoMode) {
-		class fileUploader {  
+		class fileUploader {
 			public function __construct($uploads) {
 				global $docRoot,$iceRoot,$ICEcoder,$doNext;
 				$uploadDir=$docRoot.$iceRoot.str_replace("..","",str_replace("|","/",strClean($_POST['folder'])."/"));
-				foreach($uploads as $current) {  
+				foreach($uploads as $current) {
 					$this->uploadFile=$uploadDir.$current->name;
 					$fileName = $current->name;
 					// Get & set existing perms for existing files, or set to newFilePerms setting for new files
@@ -732,38 +732,38 @@ if (!isset($ftpSite) && !$error && $_GET['action']=="upload") {
 						$doNext .= 'top.ICEcoder.updateFileManagerList(\'add\',top.ICEcoder.selectedFiles[top.ICEcoder.selectedFiles.length-1].replace(/\|/g,\'/\'),\''.str_replace("'","\'",$fileName).'\',false,false,true,\'file\'); top.ICEcoder.serverMessage("'.$t['Uploaded file(s) OK'].'");setTimeout(function(){top.ICEcoder.serverMessage();},2000);';
 						$finalAction = "upload";
 					} else {
-						$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot upload']." \\\\n".$fileName."\\\\n ".$t['into']." \\\\n'+top.ICEcoder.selectedFiles[top.ICEcoder.selectedFiles.length-1].replace(/\|/g,'/'));";
+						$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot upload']." \\\\n".$fileName."\\\\n ".$t['into']." \\\\n'+top.ICEcoder.selectedFiles[top.ICEcoder.selectedFiles.length-1].replace(/\|/g,'/'),'error');";
 						$finalAction = "nothing";
 					}
-				}  
-			}  
+				}
+			}
 
-			public function upload($current,$uploadFile,$setPerms){ 
+			public function upload($current,$uploadFile,$setPerms){
 				if(move_uploaded_file($current->tmp_name,$uploadFile)){
 					chmod($uploadFile,octdec($setPerms));
-					return true;  
-				}  
-			}  
+					return true;
+				}
+			}
 		}
 
 		function getDetails($fileArr) {
 			foreach($fileArr['name'] as $keyee => $info) {
-				$uploads[$keyee]->name=xssClean($fileArr['name'][$keyee],"html");  
-				$uploads[$keyee]->type=$fileArr['type'][$keyee];  
-				$uploads[$keyee]->tmp_name=$fileArr['tmp_name'][$keyee];  
-				$uploads[$keyee]->error=$fileArr['error'][$keyee];  
-			}  
-			return $uploads;  
+				$uploads[$keyee]->name=xssClean($fileArr['name'][$keyee],"html");
+				$uploads[$keyee]->type=$fileArr['type'][$keyee];
+				$uploads[$keyee]->tmp_name=$fileArr['tmp_name'][$keyee];
+				$uploads[$keyee]->error=$fileArr['error'][$keyee];
+			}
+			return $uploads;
 		}
 
-		if($_FILES['filesInput']){  
+		if($_FILES['filesInput']){
 			$uploads = getDetails($_FILES['filesInput']);
 			$fileUploader=new fileUploader($uploads);
 		}
 		// Run our custom processes
 		include_once("../processes/on-file-upload.php");
 	} else {
-		$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot upload...']."');";
+		$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot upload...']."','error');";
 		$finalAction = "nothing";
 	}
 
@@ -793,11 +793,11 @@ if (!$error && $_GET['action']=="delete") {
 				// Run our custom processes
 				include_once("../processes/on-file-dir-delete.php");
 			} else {
-				$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot delete']."\\\\n".$fileLoc."/".$fileName."');";
+				$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot delete']."\\\\n".$fileLoc."/".$fileName."','error');";
 				$finalAction = "nothing";
 			}
 		} else {
-			$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot delete more...']."');";
+			$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot delete more...']."','error');";
 			$finalAction = "nothing";
 		}
 	// Local
@@ -808,13 +808,13 @@ if (!$error && $_GET['action']=="delete") {
 			$fullPath = $docRoot.$iceRoot.$fullPath;
 
 			if (rtrim($fullPath,"/") == rtrim($docRoot,"/")) {
-				$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot delete...']."');";
+				$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot delete...']."','error');";
 			} else if (!$demoMode && is_writable($fullPath)) {
 				if (is_dir($fullPath)) {
 					rrmdir($fullPath);
 				} else {
 					// Delete file to tmp dir or full delete
-					$ICEcoder['deleteToTmp']					
+					$ICEcoder['deleteToTmp']
 						? rename($fullPath,str_replace("\\","/",dirname(__FILE__))."/../tmp/.".str_replace(":","_",str_replace("/","_",$fullPath)))
 						: unlink($fullPath);
 				}
@@ -827,7 +827,7 @@ if (!$error && $_GET['action']=="delete") {
 				// Run our custom processes
 				include_once("../processes/on-file-dir-delete.php");
 			} else {
-				$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot delete']."\\\\n".str_replace($docRoot,"",$fullPath)."');";
+				$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot delete']."\\\\n".str_replace($docRoot,"",$fullPath)."','error');";
 				$finalAction = "nothing";
 			}
 		}
@@ -839,9 +839,9 @@ if (!$error && $_GET['action']=="delete") {
 function rrmdir($dir) {
 	global $ICEcoder;
 
-	if (is_dir($dir)) { 
-		$objects = scandir($dir); 
-		foreach ($objects as $object) { 
+	if (is_dir($dir)) {
+		$objects = scandir($dir);
+		foreach ($objects as $object) {
 			if ($object != "." && $object != "..") {
 				if (filetype($dir."/".$object) == "dir") {
 					rrmdir($dir."/".$object);
@@ -850,13 +850,13 @@ function rrmdir($dir) {
 						? rename($dir."/".$object,str_replace("\\","/",dirname(__FILE__))."/../tmp/.".str_replace(":","_",str_replace("/","_",$dir))."/".$object)
 						: unlink($dir."/".$object);
 				}
-			} 
-		} 
+			}
+		}
 		reset($objects);
 		$ICEcoder['deleteToTmp']
 			? rename($dir,str_replace("\\","/",dirname(__FILE__))."/../tmp/.".str_replace(":","_",str_replace("/","_",$dir)))
 			: rmdir($dir);
-	} 
+	}
 };
 
 // ======================
@@ -874,7 +874,7 @@ if (!isset($ftpSite) && !$error && $_GET['action']=="replaceText") {
 		// Run our custom processes
 		include_once("../processes/on-file-replace-text.php");
 	} else {
-		$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot replace...']."\\\\n".$file."');";
+		$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot replace...']."\\\\n".$file."','error');";
 		$finalAction = "nothing";
 	}
 	$doNext .= 'top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);';
@@ -899,7 +899,7 @@ if (!isset($ftpSite) && !$error && $_GET['action']=="getRemoteFile") {
 		include_once("../processes/on-get-remote-file.php");
 	} else {
 		$finalAction = "nothing";
-		$doNext .= 'top.ICEcoder.message(\''.$t['Sorry, could not...'].' '.$file.'\');';
+		$doNext .= 'top.ICEcoder.message("Sorry","'.$t['Sorry, could not...']." ".$file.'","error");';
 	}
 	$doNext .= 'top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);';
 };
@@ -915,7 +915,7 @@ if (!$error && $_GET['action']=="perms") {
 		if (isset($ftpSite)) {
 			$ftpFilepath = ltrim($fileLoc."/".$fileName,"/");
 			if (!ftpPerms($ftpConn, octdec(numClean($_GET['perms'])), $ftpFilepath)) {
-				$doNext .= 'top.ICEcoder.message("Sorry, could not set perms on '.$ftpFilepath.' at '.$ftpHost.'");';
+				$doNext .= 'top.ICEcoder.message("Sorry","Sorry, could not set perms on '.$ftpFilepath.' at '.$ftpHost.'","error");';
 			} else {
 				$updateFM = true;
 			}
@@ -934,7 +934,7 @@ if (!$error && $_GET['action']=="perms") {
 		include_once("../processes/on-file-dir-perms.php");
 	} else {
 		$finalAction = "nothing";
-		$doNext .= "top.ICEcoder.message('".$t['Sorry, cannot change...']." \\n".strClean($file)."');";
+		$doNext .= "top.ICEcoder.message('Sorry','".$t['Sorry, cannot change...']." \\n".strClean($file)."','error');";
 	}
 	$doNext .= 'top.ICEcoder.serverMessage();top.ICEcoder.serverQueue("del",0);';
 };

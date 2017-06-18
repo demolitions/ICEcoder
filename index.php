@@ -39,6 +39,7 @@ $isMac = strpos($_SERVER['HTTP_USER_AGENT'], "Macintosh")>-1 ? true : false;
 if ($ICEcoder["theme"]=="default") {echo 'lib/editor.css';} else {echo $ICEcoder["codeMirrorDir"].'/theme/'.$ICEcoder["theme"].'.css';};
 echo "?microtime=".microtime(true);
 ?>">
+<link rel="stylesheet" href="sweetalert/sweetalert.min.css?microtime=<?php echo microtime(true);?>" type="text/css">
 <link rel="icon" type="image/png" href="favicon.png">
 <script>
 iceRoot = "<?php echo $ICEcoder['root']; ?>";
@@ -74,6 +75,7 @@ $t = $text['index'];
 <script src="lib/draggabilly.pkgd.min.js?microtime=<?php echo microtime(true);?>"></script>
 <script src="farbtastic/farbtastic.js?microtime=<?php echo microtime(true);?>"></script>
 <script src="lib/difflib.js?microtime=<?php echo microtime(true);?>"></script>
+<script src="sweetalert/sweetalert.min.js?microtime=<?php echo microtime(true);?>"></script>
 <link rel="stylesheet" href="farbtastic/farbtastic.css?microtime=<?php echo microtime(true);?>" type="text/css">
 </head>
 
@@ -238,10 +240,10 @@ $t = $text['index'];
 				<li><a nohref onclick="ICEcoder.githubManager()">GitHub</a></li>
 				<!--
 				<li><a nohref onclick="ICEcoder.message('SVN integration coming soon')">SVN</a></li>
-				<li><a nohref onclick="ICEcoder.message('Bitbucket integration coming soon\n\nCan you help with this? Get involved at icecoder.net')">Bitbucket</a></li>
-				<li><a nohref onclick="ICEcoder.message('Amazon AWS integration coming soon\n\nCan you help with this? Get involved at icecoder.net')">Amazon AWS</a></li>
-				<li><a nohref onclick="ICEcoder.message('Dropbox integration coming soon\n\nCan you help with this? Get involved at icecoder.net')">Dropbox</a></li>
-				<li><a nohref onclick="ICEcoder.message('SSH integration coming soon\n\nCan you help with this? Get involved at icecoder.net')">SSH</a></li>
+				<li><a nohref onclick="ICEcoder.message('Bitbucket integration coming soon','Can you help with this? Get involved at icecoder.net')">Bitbucket</a></li>
+				<li><a nohref onclick="ICEcoder.message('Amazon AWS integration coming soon','Can you help with this? Get involved at icecoder.net')">Amazon AWS</a></li>
+				<li><a nohref onclick="ICEcoder.message('Dropbox integration coming soon','Can you help with this? Get involved at icecoder.net')">Dropbox</a></li>
+				<li><a nohref onclick="ICEcoder.message('SSH integration coming soon','Can you help with this? Get involved at icecoder.net')">SSH</a></li>
 				//-->
 			</ul>
 		</div>
@@ -273,7 +275,7 @@ $t = $text['index'];
 			<div class="findReplace">
 				<div class="findText"><?php echo $t['Find'];?></div>
 				<input type="text" name="find" value="" id="find" class="textbox find" onKeyUp="ICEcoder.findReplace(top.document.getElementById('find').value,true,false,event.keyCode == 27)">
-				
+
 				<div class="selectWrapper" style="width: 41px">
 					<select name="connector" onChange="ICEcoder.findReplaceOptions()" style="width: 40px; margin-top: 4px">
 					<option><?php echo $t['in'];?></option>
